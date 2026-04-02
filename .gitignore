@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+myvenv/
+db.sqlite3
+media/
+
+# Node/React Native/Expo
+mobile/node_modules/
+mobile/.expo/
+node_modules/
+.expo/
+*.log
+
+# Env
+.env
+
+# Models
+*.h5
+*.pt
+*.pth

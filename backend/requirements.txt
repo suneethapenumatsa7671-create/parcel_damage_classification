@@ -1,0 +1,12 @@
+# FastAPI backend dependencies
+fastapi>=0.110.0
+uvicorn[standard]>=0.29.0
+sqlalchemy>=2.0.0
+python-multipart>=0.0.9    # Required for file uploads
+pydantic[email]>=2.0.0
+aiofiles>=23.2.1
+
+# ML / Image processing
+tensorflow>=2.13.0         # For ResNet-34 model inference
+numpy>=1.24.0
+Pillow>=10.0.0             # Image loading support
