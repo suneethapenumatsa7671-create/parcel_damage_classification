@@ -40,7 +40,16 @@ def get_model():
             
         try:
             logger.info(f"Loading TFLite model from {MODEL_PATH}...")
-            from ai_edge_litert.interpreter import Interpreter
+            
+            try:
+                # Try full tensorflow first (for local environment to avoid op version errors)
+                from tensorflow.lite.python.interpreter import Interpreter
+                logger.info("Using tensorflow.lite runtime.")
+            except ImportError:
+                # Fallback to ai-edge-litert (for Render deployment)
+                from ai_edge_litert.interpreter import Interpreter
+                logger.info("Using ai-edge-litert runtime.")
+                
             # Load TFLite model and allocate tensors.
             _model = Interpreter(model_path=str(MODEL_PATH))
             _model.allocate_tensors()
