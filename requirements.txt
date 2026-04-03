@@ -66,7 +66,7 @@ six
 SQLAlchemy
 sqlparse
 starlette
-tensorflow-cpu
+tensorflow-cpu>=2.16.1
 termcolor
 threadpoolctl
 typing-inspection

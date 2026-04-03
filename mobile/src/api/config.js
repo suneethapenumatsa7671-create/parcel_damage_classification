@@ -11,7 +11,7 @@
  *   Android emulator → "http://10.0.2.2:8001"
  *   iOS simulator    → "http://127.0.0.1:8001"
  */
-export const BASE_URL = "https://parcel-damage-classification-d8ao.onrender.com"; // Render Backend URL
+export const BASE_URL = "https://parcel-damage-classification-d8so.onrender.com"; // Render Backend URL
 
 export const ENDPOINTS = {
   // Auth
