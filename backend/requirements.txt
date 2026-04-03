@@ -7,6 +7,6 @@ pydantic[email]>=2.0.0
 aiofiles>=23.2.1
 
 # ML / Image processing
-tensorflow>=2.16.1         # For ResNet-34 model inference
+ai-edge-litert             # For ResNet-34 model inference (replaces bloated tensorflow)
 numpy>=1.24.0
 Pillow>=10.0.0             # Image loading support

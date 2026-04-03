@@ -40,9 +40,9 @@ def get_model():
             
         try:
             logger.info(f"Loading TFLite model from {MODEL_PATH}...")
-            import tensorflow as tf
+            from ai_edge_litert.interpreter import Interpreter
             # Load TFLite model and allocate tensors.
-            _model = tf.lite.Interpreter(model_path=str(MODEL_PATH))
+            _model = Interpreter(model_path=str(MODEL_PATH))
             _model.allocate_tensors()
             logger.info("TFLite Model loaded successfully.")
         except Exception as exc:
@@ -92,9 +92,9 @@ async def predict_damage(
 
     # --- Pre-process image ---
     try:
-        from tensorflow.keras.preprocessing import image as keras_image
-        img = keras_image.load_img(str(save_path), target_size=(256, 256))
-        img_array = keras_image.img_to_array(img) / 255.0
+        from PIL import Image
+        img = Image.open(str(save_path)).resize((256, 256)).convert('RGB')
+        img_array = np.array(img, dtype=np.float32) / 255.0
         img_array = np.expand_dims(img_array, axis=0)
     except Exception as exc:
         logger.error(f"Pre-processing failed: {exc}")
