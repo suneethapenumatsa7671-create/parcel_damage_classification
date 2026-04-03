@@ -20,7 +20,7 @@ router = APIRouter(prefix="/api/predict", tags=["Prediction"])
 #  Model loading (loaded once at startup)                                      #
 # --------------------------------------------------------------------------- #
 BASE_DIR = Path(__file__).resolve().parent.parent.parent   # project root
-MODEL_PATH = BASE_DIR / "models" / "resnet34_model.h5"
+MODEL_PATH = BASE_DIR / "models" / "resnet34_model.tflite"
 MEDIA_DIR = BASE_DIR / "media" / "uploads"
 MEDIA_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -31,7 +31,7 @@ ALLOWED_EXTENSIONS = {".jpg", ".jpeg", ".png", ".bmp", ".webp"}
 _model = None
 
 def get_model():
-    """Load model on first use."""
+    """Load TFLite model on first use."""
     global _model
     if _model is None:
         if not MODEL_PATH.exists():
@@ -39,12 +39,14 @@ def get_model():
             raise RuntimeError(f"Model file not found at {MODEL_PATH}")
             
         try:
-            logger.info(f"Loading model from {MODEL_PATH}...")
-            from tensorflow.keras.models import load_model
-            _model = load_model(str(MODEL_PATH))
-            logger.info("Model loaded successfully.")
+            logger.info(f"Loading TFLite model from {MODEL_PATH}...")
+            import tensorflow as tf
+            # Load TFLite model and allocate tensors.
+            _model = tf.lite.Interpreter(model_path=str(MODEL_PATH))
+            _model.allocate_tensors()
+            logger.info("TFLite Model loaded successfully.")
         except Exception as exc:
-            logger.error(f"Failed to load model: {exc}")
+            logger.error(f"Failed to load TFLite model: {exc}")
             raise RuntimeError(f"Failed to load model: {exc}") from exc
     return _model
 
@@ -103,8 +105,16 @@ async def predict_damage(
 
     # --- Run model inference ---
     try:
-        model = get_model()
-        prediction = model.predict(img_array)[0]
+        interpreter = get_model()
+        input_details = interpreter.get_input_details()
+        output_details = interpreter.get_output_details()
+
+        # Set input tensor. Convert float64 to float32
+        interpreter.set_tensor(input_details[0]['index'], img_array.astype(np.float32))
+        
+        interpreter.invoke()
+        
+        prediction = interpreter.get_tensor(output_details[0]['index'])[0]
         logger.info(f"Inference output: {prediction}")
     except Exception as exc:
         logger.error(f"Inference failed: {exc}")

@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: parcel-damage-backend
+    env: python
+    buildFilter:
+      paths:
+        - "requirements.txt"
+        - "backend/**"
+        - "models/resnet34_model.tflite"
+        - "run.py"
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python run.py"
+    plan: free
