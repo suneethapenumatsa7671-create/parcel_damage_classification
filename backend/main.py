@@ -89,7 +89,7 @@ app.include_router(auth.router)
 app.include_router(predict.router)
 app.include_router(admin.router)
 
-@app.get("/", tags=["Root"])
+@app.api_route("/", methods=["GET", "HEAD"], tags=["Root"])
 def root():
     return {
         "message": "Welcome to the Parcel Damage Classification API",
