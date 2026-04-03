@@ -31,7 +31,7 @@ httptools==0.7.1
 httpx==0.28.1
 idna==3.11
 joblib==1.5.3
-keras==3.13.2
+
 kiwisolver==1.5.0
 libclang==18.1.1
 markdown-it-py==4.0.0
