@@ -39,7 +39,9 @@ async def lifespan(app: FastAPI):
     # Startup logic
     logger.info("Starting Parcel Damage Classification API...")
     if not (BASE_DIR / "db.sqlite3").exists():
-        logger.warning(f"Database 'db.sqlite3' NOT found in {BASE_DIR}. Make sure Django has initialized it.")
+        logger.warning(f"Database 'db.sqlite3' NOT found. Creating database and tables...")
+        from backend.database import Base, engine
+        Base.metadata.create_all(bind=engine)
     else:
         logger.info(f"Database found at {BASE_DIR / 'db.sqlite3'}")
     
